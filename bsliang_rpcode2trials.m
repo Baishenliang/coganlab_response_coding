@@ -7,7 +7,7 @@ RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_
 %% load files
 load(fullfile(Trial_loc,"Trials.mat"));
 load(fullfile(Trial_loc,"trialinfo.mat"));
-save(fullfile(Trial_loc,"Trials_org.mat"),'Trials');
+save(fullfile(Trial_loc,"Trials_org2.mat"),'Trials');
 
 % Read txt files
 f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
@@ -49,15 +49,20 @@ for t=1:length(ResponseStart)
     Err_Tag = error_code.Var3(t);
     if ~isempty(Err_Tag)
         if contains(Err_Tag, 'ERR_TASK_YN_REP')
-            Trials(t).Resp_err=1;
+            %Trials(t).Resp_err=1;
+            Trials(t).Resp_err='ERR_TASK_YN_REP';
         elseif contains(Err_Tag, 'ERR_TASK_REP_YN')
-            Trials(t).Resp_err=2;
+            %Trials(t).Resp_err=2;
+            Trials(t).Resp_err='ERR_TASK_REP_YN';
         elseif contains(Err_Tag, 'ERR_RESP_REP_WRO')
-            Trials(t).Resp_err=5;
+            %Trials(t).Resp_err=5;
+            Trials(t).Resp_err='ERR_RESP_REP_WRO';
         elseif contains(Err_Tag, 'ERR_RESP_REP_MIS')
-            Trials(t).Resp_err=6;
+            %Trials(t).Resp_err=6;
+            Trials(t).Resp_err='ERR_RESP_REP_MIS';
         elseif contains(Err_Tag, 'NOISE')
-            Trials(t).Resp_err=7;
+            %Trials(t).Resp_err=7;
+            Trials(t).Resp_err='NOISE';
         end
     else
         if isequal(trialInfo{1,t}.cue,'Yes/No')
@@ -78,12 +83,14 @@ for t=1:length(ResponseStart)
 
             % 3 ERR_RESP_YN_YN Response error: yes/no task, should say yes, but say no
             if lexical_tag==1 && strcmpi(resp_YN,'no')
-                Trials(t).Resp_err=3;
+                %Trials(t).Resp_err=3;
+                Trials(t).Resp_err='ERR_RESP_YN_YN';
             end
 
             % 4 ERR_RESP_YN_NY Response error: yes/no task, should say no, but say yes
             if lexical_tag==1 && strcmpi(resp_YN,'yes')
-                Trials(t).Resp_err=4;
+                %Trials(t).Resp_err=4;
+                Trials(t).Resp_err='ERR_RESP_YN_NY';
             end
 
         end
