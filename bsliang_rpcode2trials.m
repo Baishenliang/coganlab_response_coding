@@ -7,22 +7,31 @@ RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_
 %% load files
 load(fullfile(Trial_loc,"Trials.mat"));
 load(fullfile(Trial_loc,"trialinfo.mat"));
-save(fullfile(Trial_loc,"Trials_org2.mat"),'Trials');
+save(fullfile(Trial_loc,"Trials_org3.mat"),'Trials');
 
 % Read txt files
 f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
 response_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+f = fullfile(RPcode_loc,'mfa\mfa_stim_words.txt'); 
+stim_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
 f = fullfile(RPcode_loc,'bsliang_errors.txt'); 
 error_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
 
-%% response codes
+
+%% stimuli and response codes
 % input variables
+StimStart_mfa = stim_code.Var1;
+StimEnd_mfa = stim_code.Var2;
+StimCue = stim_code.Var3;
 ResponseStart = response_code.Var1;
 ResponseEnd = response_code.Var2;
 
 % add variables
 if length(ResponseStart)==length(Trials)
     for t=1:length(ResponseStart)
+        Trials(t).StimStart_mfa = 30000*StimStart_mfa(t);
+        Trials(t).StimEnd_mfa = 30000*StimEnd_mfa(t);
+        Trials(t).StimCue = StimCue(t);
         Trials(t).ResponseStart = 30000*ResponseStart(t);
         Trials(t).ResponseEnd = 30000*ResponseEnd(t);
     end
