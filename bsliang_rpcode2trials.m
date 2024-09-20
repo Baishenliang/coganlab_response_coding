@@ -1,4 +1,5 @@
 % Write response coding to Trials.mat for BIDs formating
+clear all
 
 %% Locs
 Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D103\240106\mat';
@@ -7,7 +8,7 @@ RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_
 %% load files
 load(fullfile(Trial_loc,"Trials.mat"));
 load(fullfile(Trial_loc,"trialinfo.mat"));
-save(fullfile(Trial_loc,"Trials_org3.mat"),'Trials');
+save(fullfile(Trial_loc,"Trials_org.mat"),'Trials');
 
 % Read txt files
 f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
@@ -29,11 +30,16 @@ ResponseEnd = response_code.Var2;
 % add variables
 if length(ResponseStart)==length(Trials)
     for t=1:length(ResponseStart)
-        Trials(t).StimStart_mfa = 30000*StimStart_mfa(t);
-        Trials(t).StimEnd_mfa = 30000*StimEnd_mfa(t);
+        % Calculate the time difference between response coding and
+        % temporal information from the recording.
+        % Response coding time points are aligned to recorded sound files.
+        % Markers from Trial.mat are aligned to the recorded ieeg signals.
+        % Hence we need the adjustment.
+        Diff_RScode_EDFcode=30000*StimStart_mfa(t)-Trials(t).Auditory;
+        Trials(t).StimEnd_mfa = 30000*StimEnd_mfa(t)-Diff_RScode_EDFcode;
         Trials(t).StimCue = StimCue(t);
-        Trials(t).ResponseStart = 30000*ResponseStart(t);
-        Trials(t).ResponseEnd = 30000*ResponseEnd(t);
+        Trials(t).ResponseStart = 30000*ResponseStart(t)-Diff_RScode_EDFcode;
+        Trials(t).ResponseEnd = 30000*ResponseEnd(t)-Diff_RScode_EDFcode;
     end
 else
     msgbox('Trial number does not match response coding!')
@@ -88,7 +94,10 @@ for t=1:length(ResponseStart)
             end
 
         end
-            
+    end
+    % If it is still empty, add "CORRECT" in the error code to avoid null.
+    if isempty(Trials(t).Resp_err{1})
+        Trials(t).Resp_err='CORRECT';
     end
 end
 
