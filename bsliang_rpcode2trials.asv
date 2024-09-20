@@ -57,7 +57,22 @@ load word_lst
 for t=1:length(ResponseStart)
     Err_Tag = error_code.Var3(t);
     if ~isempty(Err_Tag)
-        Trials(t).Resp_err=Err_Tag;
+        if contains(Err_Tag, 'ERR_TASK_YN_REP')
+            %Trials(t).Resp_err=1;
+            Trials(t).Resp_err='ERR_TASK_YN_REP';
+        elseif contains(Err_Tag, 'ERR_TASK_REP_YN')
+            %Trials(t).Resp_err=2;
+            Trials(t).Resp_err='ERR_TASK_REP_YN';
+        elseif contains(Err_Tag, 'ERR_RESP_REP_WRO')
+            %Trials(t).Resp_err=5;
+            Trials(t).Resp_err='ERR_RESP_REP_WRO';
+        elseif contains(Err_Tag, 'ERR_RESP_REP_MIS')
+            %Trials(t).Resp_err=6;
+            Trials(t).Resp_err='ERR_RESP_REP_MIS';
+        elseif contains(Err_Tag, 'NOISE')
+            %Trials(t).Resp_err=7;
+            Trials(t).Resp_err=Resp_err;
+        end
     else
         if isequal(trialInfo{1,t}.cue,'Yes/No')
             % lexical task error coding
