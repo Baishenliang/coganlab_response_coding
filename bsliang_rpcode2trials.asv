@@ -109,9 +109,9 @@ for t=1:length(ResponseStart)
     % previous trial as "XXX_LATE_RESP".
     if t>1 && Trials(t).Start-Trials(t-1).ResponseEnd<0
         Trials(t-1).Resp_err=[Trials(t-1).Resp_err,'_LATE_RESP'];
-        Trials(t).Auditory_Tag = [Trials(t).Auditory_Tag,'_NOISY_BSL'];
-        Trials(t).Delay_Tag = [Trials(t).Delay_Tag,'_NOISY_BSL'];
-        Trials(t).Resp_err=[Trials(t).Resp_err,'_NOISY_BSL'];
+        Trials(t).Auditory_Tag = 'Auditory_stim';
+        Trials(t).Delay_Tag = 'Delay';
+        Trials(t).Resp_err='LATE_RESP';
     end
 end
 

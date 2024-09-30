@@ -14,7 +14,7 @@ dir = "Box\\CoganLab\\ECoG_Task_Data\\response_coding\\response_coding_results\\
 #subjs = ["D100","D101","D102","D103","D107","D23","D24","D25","D26","D27","D28","D29","D32","D35","D38",
 #         "D42","D44","D47","D53","D54","D55","D57","D59","D63","D66","D68","D69","D70","D71","D77",
 #         "D79","D80","D81","D84","D86","D90","D92","D94","D96"]
-subjs = ["D96"]
+subjs = ["D102"]
 
 def read_audio(wav_path):
     with wave.open(wav_path, 'rb') as wav_file:
