@@ -65,7 +65,7 @@ load word_lst
 for t=1:length(ResponseStart)
     Err_Tag = error_code.Var3(t);
     if ~isempty(Err_Tag)
-        Trials(t).Resp_err=Err_Tag;
+        Trials(t).Resp_err=Err_Tag{1};
     else
         if isequal(trialInfo{1,t}.cue,'Yes/No')
             % lexical task error coding
@@ -99,7 +99,7 @@ for t=1:length(ResponseStart)
     end
 
     % If it is still empty, add "CORRECT" in the error code to avoid null.
-    if isempty(Trials(t).Resp_err{1})
+    if isempty(Trials(t).Resp_err)
         Trials(t).Resp_err='CORRECT';
     end
 
