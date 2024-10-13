@@ -2,8 +2,22 @@
 clear all
 
 %% Locs
-Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
-RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D101';
+
+% D101
+% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
+% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D101';
+
+% D102
+Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D102\240106\mat';
+RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D102';
+
+% D103
+% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D103\240106\mat';
+% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D103';
+
+% D107
+% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D107B\240308\mat';
+% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
 
 %% load files
 load(fullfile(Trial_loc,"Trials.mat"));
@@ -26,6 +40,9 @@ StimEnd_mfa = stim_code.Var2;
 StimCue = stim_code.Var3;
 ResponseStart = response_code.Var1;
 ResponseEnd = response_code.Var2;
+if contains(Trial_loc,'D102')
+    ResponseStart = ResponseStart(1:331); % Patient D102 only
+end
 
 load nonword_lst
 load word_lst
@@ -149,6 +166,7 @@ if length(ResponseStart)==length(Trials)
         Trials(t).Cue_Tag = ['Cue','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
         Trials(t).Auditory_Tag = ['Auditory_stim','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
         Trials(t).Delay_Tag = ['Delay','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
+        Trials(t).Go_Tag = ['Go','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
         Trials(t).Response_Tag = ['Resp','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
 
 
