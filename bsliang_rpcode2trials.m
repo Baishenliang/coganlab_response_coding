@@ -2,27 +2,56 @@
 clear all
 
 %% Locs
+subject_Tag='D96-B';
 
-% D101
-% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
-% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D101';
+switch subject_Tag
+    case 'D70'
+        % D70
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D70\220322\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D70';
 
-% D102
-Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D102\240106\mat';
-RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D102';
+    case 'D96-A'
+        % D96-A
+        % Data collection of D96 were separated into two days
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\230819\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D96';
 
-% D103
-% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D103\240106\mat';
-% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D103';
+    case 'D96-B'
+        % D96-B
+        % Data collection of D96 were separated into two days
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\230821\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D96';
 
-% D107
-% Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D107B\240308\mat';
-% RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
+    case 'D101'
+        % D101
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D101';
 
+    case 'D102'
+        % D102
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D102\240106\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D102';
+
+    case 'D103'
+        % D103
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D103\240106\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D103';
+
+    case 'D107'
+        % D107
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D107B\240308\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
+
+end
 %% load files
-load(fullfile(Trial_loc,"Trials.mat"));
-load(fullfile(Trial_loc,"trialinfo.mat"));
+if exist(fullfile(Trial_loc,"Trials_org.mat"), 'file') == 2
+    msgbox('Trials_org.mat already exists');
+    load(fullfile(Trial_loc,"Trials_org.mat"));
+else
+    load(fullfile(Trial_loc,"Trials.mat"));
+end
 save(fullfile(Trial_loc,"Trials_org.mat"),'Trials');
+load(fullfile(Trial_loc,"trialinfo.mat"));
 
 % Read txt files
 f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
@@ -40,10 +69,24 @@ StimEnd_mfa = stim_code.Var2;
 StimCue = stim_code.Var3;
 ResponseStart = response_code.Var1;
 ResponseEnd = response_code.Var2;
+
 if contains(Trial_loc,'D102')
     ResponseStart = ResponseStart(1:331); % Patient D102 only
 end
 
+if subject_Tag=='D96-A'
+    StimStart_mfa = StimStart_mfa(1:168);
+    StimEnd_mfa = StimEnd_mfa(1:168);
+    StimCue = StimCue(1:168);
+    ResponseStart = ResponseStart(1:168);
+    ResponseEnd = ResponseEnd(1:168);
+elseif subject_Tag=='D96-B'
+    StimStart_mfa = StimStart_mfa(169:end);
+    StimEnd_mfa = StimEnd_mfa(169:end);
+    StimCue = StimCue(169:end);
+    ResponseStart = ResponseStart(169:end);
+    ResponseEnd = ResponseEnd(169:end);
+end
 load nonword_lst
 load word_lst
 
@@ -51,6 +94,9 @@ load word_lst
 if length(ResponseStart)==length(Trials)
     for t=1:length(ResponseStart)
 
+        %% testing congruency
+        StimCue_t=StimCue(t);
+        disp([trialInfo{1,t}.sound,' in TrialInfo, and ', StimCue_t{1}, ' in MFA event coding.'])
         %% Temporal coding
         % Calculate the time difference between response coding and
         % temporal information from the recording.
