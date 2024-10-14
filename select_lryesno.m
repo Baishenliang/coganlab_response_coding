@@ -9,7 +9,7 @@ clc;
 %% Basic parameters
 loc='C:\Users\bl314\';
 dir='Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\';
-subj='D54';
+subj='D92';
 
 path=[loc, dir, subj];
 cd(path)
@@ -56,7 +56,7 @@ for i=1:size(Y_words,1)
     j=1;
     whisper_rscode=[];
     while 1
-        if Y_start>whisper_rscodes.start(j) && Y_end<whisper_rscodes.end(j)
+        if round(Y_start,2)>=round(whisper_rscodes.start(j),2) && round(Y_end,2)<=round(whisper_rscodes.end(j),2)
             whisper_rscode=whisper_rscodes.cue(j);
             break;
         else
