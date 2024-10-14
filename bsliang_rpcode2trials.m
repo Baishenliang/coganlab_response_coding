@@ -2,7 +2,7 @@
 clear all
 
 %% Locs
-subject_Tag='D96-B';
+subject_Tag='D94';
 
 switch subject_Tag
     case 'D70'
@@ -10,6 +10,9 @@ switch subject_Tag
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D70\220322\mat';
         RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D70';
 
+    case 'D94'
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D94\230808\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D94';
     case 'D96-A'
         % D96-A
         % Data collection of D96 were separated into two days
@@ -74,19 +77,20 @@ if contains(Trial_loc,'D102')
     ResponseStart = ResponseStart(1:331); % Patient D102 only
 end
 
-if subject_Tag=='D96-A'
+if isequal(subject_Tag,'D96-A')
     StimStart_mfa = StimStart_mfa(1:168);
     StimEnd_mfa = StimEnd_mfa(1:168);
     StimCue = StimCue(1:168);
     ResponseStart = ResponseStart(1:168);
     ResponseEnd = ResponseEnd(1:168);
-elseif subject_Tag=='D96-B'
+elseif isequal(subject_Tag,'D96-B')
     StimStart_mfa = StimStart_mfa(169:end);
     StimEnd_mfa = StimEnd_mfa(169:end);
     StimCue = StimCue(169:end);
     ResponseStart = ResponseStart(169:end);
     ResponseEnd = ResponseEnd(169:end);
 end
+
 load nonword_lst
 load word_lst
 

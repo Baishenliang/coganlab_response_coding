@@ -1,7 +1,16 @@
-
-load trialInfo.mat
 % load block_wav_onsets.mat
+clear all
 
+box_local='C:\Users\bl314\Box\';
+subj='D54';
+switch subj
+    case 'D53'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D53'];
+    case 'D54'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54'];
+end
+
+load(fullfile(subj_path,'trialInfo.mat'));
 
 offset = 0.0234; % seconds
 is_picture_naming = 0;
@@ -10,11 +19,11 @@ if iscell(trialInfo)
     trialInfo = cellfun(@(a) a, trialInfo);
 end
 
-rc = scantext('first_stims.txt', '\t', 0, '%f %f %s');
+rc = scantext(fullfile(subj_path,'first_stims.txt'), '\t', 0, '%f %f %s');
 first_stims_onset = rc{1};
 %first_stims_onset(1)=first_stims_onset(1)+5;
 % fid = fopen('go_events.txt', 'w');
-fid2 = fopen('cue_events.txt', 'w');
+fid2 = fopen(fullfile(subj_path,'cue_events.txt'), 'w');
 b = 0;
 for t = 1:numel(trialInfo)
     
