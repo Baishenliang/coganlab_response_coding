@@ -2,9 +2,19 @@
 clear all
 
 %% Locs
-subject_Tag='D94';
+subject_Tag='D54';
 
 switch subject_Tag
+    case 'D53'
+        % D53
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D53\201212\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D53';
+
+    case 'D54'
+        % D54
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D54\210127\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54';
+    
     case 'D70'
         % D70
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D70\220322\mat';
@@ -203,6 +213,16 @@ if length(ResponseStart)==length(Trials)
                 Resp_Err='NOISY_BSL';
             else
                 Resp_Err=[Resp_Err,'/NOISY_BSL'];
+            end
+        end
+
+        % If Oral response comes before the "GO" cue, the trial is marked
+        % as "EARLY_RESP"
+        if Trials(t).ResponseStart-Trials(t).Go<0
+            if isempty(Resp_Err)
+                Resp_Err='EARLY_RESP';
+            else
+                Resp_Err=[Resp_Err,'/EARLY_RESP'];
             end
         end
     
