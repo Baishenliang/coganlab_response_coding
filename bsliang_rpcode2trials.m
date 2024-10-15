@@ -6,56 +6,16 @@ subject_Tag='D96';
 
 Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
 RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
-
-switch subject_Tag
-    case 'D53'
-        % D53
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D53\201212\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D53';
-
-    case 'D54'
-        % D54
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D54\210127\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54';
- 
-    case 'D55'
-        % D55
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D55\210301\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D55';
-
-    case 'D70'
-        % D70
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D70\220322\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D70';
-
-    case 'D94'
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D94\230808\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D94';
-    case 'D96'
-        % D96
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D96';
-    case 'D101'
-        % D101
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D101';
-
-    case 'D102'
-        % D102
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D102\240106\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D102';
-
-    case 'D103'
-        % D103
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D103\240106\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D103';
-
-    case 'D107'
-        % D107
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D107B\240308\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
-
+trial_files = dir(fullfile(Trial_loc_root, '**', 'mat', 'Trials.mat'));
+if numel(trial_files) > 1
+    error('Found more than one Trial.mat');
+elseif isscalar(trial_files)
+    disp(['Trial.mat found at: ', fullfile(trial_files.folder, trial_files.name)]);
+    Trial_loc=trial_files.folder;
+else
+    disp('No Trial.mat file found.');
 end
+
 %% load files
 if exist(fullfile(Trial_loc,"Trials_org.mat"), 'file') == 2
     msgbox('Trials_org.mat already exists');
