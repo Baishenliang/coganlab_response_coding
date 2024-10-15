@@ -2,7 +2,10 @@
 clear all
 
 %% Locs
-subject_Tag='D55';
+subject_Tag='D96';
+
+Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
+RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
 
 switch subject_Tag
     case 'D53'
@@ -28,18 +31,10 @@ switch subject_Tag
     case 'D94'
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D94\230808\mat';
         RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D94';
-    case 'D96-A'
-        % D96-A
-        % Data collection of D96 were separated into two days
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\230819\mat';
+    case 'D96'
+        % D96
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\mat';
         RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D96';
-
-    case 'D96-B'
-        % D96-B
-        % Data collection of D96 were separated into two days
-        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D96\230821\mat';
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D96';
-
     case 'D101'
         % D101
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D101\231022\mat';
@@ -90,20 +85,6 @@ ResponseEnd = response_code.Var2;
 
 if contains(Trial_loc,'D102')
     ResponseStart = ResponseStart(1:331); % Patient D102 only
-end
-
-if isequal(subject_Tag,'D96-A')
-    StimStart_mfa = StimStart_mfa(1:168);
-    StimEnd_mfa = StimEnd_mfa(1:168);
-    StimCue = StimCue(1:168);
-    ResponseStart = ResponseStart(1:168);
-    ResponseEnd = ResponseEnd(1:168);
-elseif isequal(subject_Tag,'D96-B')
-    StimStart_mfa = StimStart_mfa(169:end);
-    StimEnd_mfa = StimEnd_mfa(169:end);
-    StimCue = StimCue(169:end);
-    ResponseStart = ResponseStart(169:end);
-    ResponseEnd = ResponseEnd(169:end);
 end
 
 load nonword_lst
