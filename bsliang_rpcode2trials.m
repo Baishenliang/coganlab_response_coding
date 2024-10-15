@@ -2,7 +2,7 @@
 clear all
 
 %% Locs
-subject_Tag='D54';
+subject_Tag='D55';
 
 switch subject_Tag
     case 'D53'
@@ -14,7 +14,12 @@ switch subject_Tag
         % D54
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D54\210127\mat';
         RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54';
-    
+ 
+    case 'D55'
+        % D55
+        Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D55\210301\mat';
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D55';
+
     case 'D70'
         % D70
         Trial_loc='C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\D70\220322\mat';
