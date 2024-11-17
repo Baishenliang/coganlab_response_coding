@@ -13,7 +13,7 @@ elseif isscalar(trial_files)
     disp(['Trial.mat found at: ', fullfile(trial_files.folder, trial_files.name)]);
     Trial_loc=trial_files.folder;
 else
-    disp('No Trial.mat file found.');
+    error('No Trial.mat file found.');
 end
 
 %% load files

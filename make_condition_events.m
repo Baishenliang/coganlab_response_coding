@@ -5,10 +5,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 box_local='C:\Users\bl314\Box\';
-subj='D63';
+subj='D90';
 switch subj
     case 'D63'
         subj_path=[box_local,'CoganLab\ECoG_Task_Data\Cogan_Task_Data\D63\Lexical Delay\Block 1 2 3 4'];
+    case 'D65'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D65'];
+    case 'D90'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D90'];
 end
 
 load(fullfile(subj_path,'trialInfo.mat'));

@@ -2,12 +2,16 @@
 clear all
 
 box_local='C:\Users\bl314\Box\';
-subj='D54';
+subj='D90';
 switch subj
     case 'D53'
         subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D53'];
     case 'D54'
         subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54'];
+    case 'D65'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D65'];
+    case 'D90'
+        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D90'];
 end
 
 load(fullfile(subj_path,'trialInfo.mat'));
