@@ -2,7 +2,7 @@
 clear all
 
 %% Locs
-subject_Tag='D66';
+subject_Tag='D65';
 
 Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
 RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
