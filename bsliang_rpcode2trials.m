@@ -2,7 +2,7 @@
 clear all
 
 %% Locs
-subject_Tag='D65';
+subject_Tag='D63';
 
 Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
 RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
@@ -154,7 +154,8 @@ if length(ResponseStart)==length(Trials)
         end
         % For the trial before, if the patient responses too late and affect the baseline.
         % Then mark all the event of the current trials as "NOISY_BSL"
-        if t>1 && Trials(t).Auditory-0.5-Trials(t-1).ResponseEnd<0
+        if t>1 && Trials(t).Start-0.5*30000-Trials(t-1).ResponseEnd<0
+            disp('Noisy baseline trial detected')
             if isempty(Resp_Err)
                 Resp_Err='NOISY_BSL';
             else
