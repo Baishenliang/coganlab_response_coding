@@ -1,13 +1,16 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all
 
-subjects_Tag = {"D53", "D54", "D55", "D57", "D59", "D65", "D66", "D68", "D69", "D70", "D71", "D77", "D79", "D81", "D94", "D96", "D101", "D102", "D103", "D107"};
+subjects_Tag = ["D53", "D54", "D55", "D57", "D59", "D65", "D66", "D68", "D69", "D70", "D71", "D77", "D79", "D81", "D94", "D96", "D101", "D102", "D103", "D107B"];
 
 for subject_Tag = subjects_Tag
     %% Locs
     
     Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
     RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
+    if isequal(subject_Tag,"D107B")
+        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
+    end
     trial_files = dir(fullfile(Trial_loc_root, '**', 'mat', 'Trials.mat'));
     if numel(trial_files) > 1
         error([subject_Tag ' Found more than one Trial.mat']);
