@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all
 
-subjects_Tag = ["D53", "D54", "D55", "D57", "D59", "D65", "D66", "D68", "D69", "D70", "D71", "D77", "D79", "D81", "D94", "D96", "D101", "D102", "D103", "D107B"];
+subjects_Tag = ["D84"];
 
 for subject_Tag = subjects_Tag
     %% Locs
