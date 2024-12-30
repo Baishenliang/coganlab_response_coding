@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all
 
-subjects_Tag = ["D84"];
+subjects_Tag = ["D90"];
 
 for subject_Tag = subjects_Tag
     %% Locs
@@ -48,7 +48,9 @@ for subject_Tag = subjects_Tag
     ResponseStart = response_code.Var1;
     ResponseEnd = response_code.Var2;
     
-    if contains(Trial_loc,'D102')
+    if contains(Trial_loc,'D90')
+        ResponseStart = ResponseStart(1:296); % Patient D90 only
+    elseif contains(Trial_loc,'D102')
         ResponseStart = ResponseStart(1:331); % Patient D102 only
     end
     
