@@ -3,16 +3,15 @@
 %   correcting the cue_event, whichi make causes some jitters for the
 %   condition_event
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear all
+clc
 
 box_local='C:\Users\bl314\Box\';
-subj='D90';
-switch subj
-    case 'D63'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\Cogan_Task_Data\D63\Lexical Delay\Block 1 2 3 4'];
-    case 'D65'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D65'];
-    case 'D90'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D90'];
+subj='D38';
+if strcmp(subj,'D63') 
+    subj_path=[box_local,'CoganLab\ECoG_Task_Data\Cogan_Task_Data\D63\Lexical Delay\Block 1 2 3 4'];
+else
+    subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\',subj);
 end
 
 load(fullfile(subj_path,'trialInfo.mat'));
@@ -25,7 +24,16 @@ end
 rc = scantext(fullfile(subj_path,'cue_events.txt'), '\t', 0, '%f %f %s');
 first_stims_onset = rc{1};
 % fid = fopen('go_events.txt', 'w');
-fid2 = fopen(fullfile(subj_path,'condition_events.txt'), 'w');
+file_path = fullfile(subj_path, 'condition_events.txt');
+if exist(file_path, 'file') == 2
+    error('File "%s" already exists. Program terminated.', file_path);
+end
+fid2 = fopen(file_path, 'w');
+if fid2 == -1
+    error('Failed to open file for writing: %s', file_path);
+end
+
+
 b = 0;
 for t = 1:numel(trialInfo)
     if trialInfo(t).block ~= b

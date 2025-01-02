@@ -2,17 +2,8 @@
 clear all
 
 box_local='C:\Users\bl314\Box\';
-subj='D90';
-switch subj
-    case 'D53'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D53'];
-    case 'D54'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D54'];
-    case 'D65'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D65'];
-    case 'D90'
-        subj_path=[box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D90'];
-end
+subj='D38';
+subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\',subj);
 
 load(fullfile(subj_path,'trialInfo.mat'));
 
@@ -27,7 +18,16 @@ rc = scantext(fullfile(subj_path,'first_stims.txt'), '\t', 0, '%f %f %s');
 first_stims_onset = rc{1};
 %first_stims_onset(1)=first_stims_onset(1)+5;
 % fid = fopen('go_events.txt', 'w');
-fid2 = fopen(fullfile(subj_path,'cue_events.txt'), 'w');
+
+file_path = fullfile(subj_path, 'cue_events.txt');
+if exist(file_path, 'file') == 2
+    error('File "%s" already exists. Program terminated.', file_path);
+end
+fid2 = fopen(file_path, 'w');
+if fid2 == -1
+    error('Failed to open file for writing: %s', file_path);
+end
+
 b = 0;
 for t = 1:numel(trialInfo)
     
