@@ -6,14 +6,14 @@ import whisper
 import tempfile
 import os
 import librosa
+import soundfile as sf
 
-model = whisper.load_model("small")
+model = whisper.load_model("large")
 options = {"language": "en"}
 
-loc = "C:\\Users\\86135\\"
+loc = "C:\\Users\\bl314\\"
 dir = "Box\\CoganLab\\ECoG_Task_Data\\response_coding\\response_coding_results\\LexicalDecRepDelay\\"
-# subjs = ["D23","D24","D25","D26","D27","D28",'D29','D32','D35','D38','D42','D44','D47']
-subjs =['D47']
+subjs = ["D23","D24","D25","D26","D27","D28",'D29','D32','D35','D38','D42','D44','D47']
 
 def read_audio(wav_path):
     audio_data, frame_rate=librosa.load(wav_path,sr=None)
@@ -25,11 +25,7 @@ def extract_segment(audio_data, frame_rate, start_time, end_time):
     return audio_data[start_frame:end_frame]
 
 def save_temp_wav(audio_segment, frame_rate, temp_wav_path):
-    with wave.open(temp_wav_path, 'wb') as wav_file:
-        wav_file.setnchannels(1) 
-        wav_file.setsampwidth(2)  # 16-bit
-        wav_file.setframerate(frame_rate)
-        wav_file.writeframes(audio_segment.tobytes())
+    sf.write(temp_wav_path,audio_segment,frame_rate)
 
 def process_audio_segments(audio_data, frame_rate, time_windows):
     results = []
@@ -57,6 +53,7 @@ def process_audio_segments(audio_data, frame_rate, time_windows):
 def main():
 
     for subj in subjs:
+        print(f'Now doing patient {subj}')
 
         txt_path1 = loc + dir + subj + "\\mfa\\annotated_yes_windows.txt"
         time_windows1 = pd.read_csv(txt_path1, sep='\t',header=None)
