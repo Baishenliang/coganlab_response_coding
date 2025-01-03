@@ -2,7 +2,7 @@
 clear all
 
 box_local='C:\Users\bl314\Box\';
-subj='D38';
+subj='D80';
 subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\',subj);
 
 load(fullfile(subj_path,'trialInfo.mat'));
