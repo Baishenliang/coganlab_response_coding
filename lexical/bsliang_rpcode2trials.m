@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all
 
-subjects_Tag = ["D80"];
+subjects_Tag = ["D29"];
 
 for subject_Tag = subjects_Tag
     %% Locs
@@ -12,6 +12,9 @@ for subject_Tag = subjects_Tag
         RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
     end
     trial_files = dir(fullfile(Trial_loc_root, '**', 'mat', 'Trials.mat'));
+    % if strcmp(subject_Tag,'D25')
+    %     trial_files = dir(fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\notrigger_D25', 'Trials.mat'));
+    % end
     if numel(trial_files) > 1
         error([subject_Tag ' Found more than one Trial.mat']);
     elseif isscalar(trial_files)
@@ -50,6 +53,12 @@ for subject_Tag = subjects_Tag
     
     if contains(Trial_loc,'D90')
         ResponseStart = ResponseStart(1:296); % Patient D90 only
+    elseif contains(Trial_loc,'D28')
+        StimStart_mfa = StimStart_mfa([1:252,253+(336-322):end]); % Patient D28 only
+        StimEnd_mfa = StimEnd_mfa([1:252,253+(336-322):end]);
+        StimCue = StimCue([1:252,253+(336-322):end]);
+        ResponseStart = ResponseStart([1:252,253+(336-322):end]);
+        ResponseEnd = ResponseEnd([1:252,253+(336-322):end]);
     elseif contains(Trial_loc,'D92') % Patient D92 only
         StimStart_mfa = StimStart_mfa(85:end);
         StimEnd_mfa = StimEnd_mfa(85:end);
@@ -93,12 +102,20 @@ for subject_Tag = subjects_Tag
     
             % get cue word and lexical property
             cue_word=trialInfo{1,t}.sound;
+            if contains(Trial_loc,'D23')
+                if strcmp(cue_word,'casif.wav')
+                    cue_word='casef.wav';
+                elseif strcmp(cue_word,'valek.wav')
+                    cue_word='valuk.wav';
+                end
+
+            end
             if any(strcmp(cue_word, words))
                 Task_word_Tag='Word';
             elseif any(strcmp(cue_word, nonwords))
                 Task_word_Tag='Nonword';
             else
-                msgbox('Wrong word cue. Check the response coding.');
+                msgbox([cue_word,'Wrong word cue. Check the response coding.']);
             end
     
             %% Error, noise, and late response coding
