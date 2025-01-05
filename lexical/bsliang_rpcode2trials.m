@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
-clear all
+clear all; clc
 
-subjects_Tag = ["D47"];
+subjects_Tag = ["D117"];
 
 for subject_Tag = subjects_Tag
     %% Locs
@@ -67,6 +67,12 @@ for subject_Tag = subjects_Tag
         ResponseEnd = ResponseEnd(85:end);
     elseif contains(Trial_loc,'D102')
         ResponseStart = ResponseStart(1:331); % Patient D102 only
+    elseif contains(Trial_loc,'D117')
+        StimStart_mfa = StimStart_mfa([1:113,115:end]); % Patient D117 only
+        StimEnd_mfa = StimEnd_mfa([1:113,115:end]);
+        StimCue = StimCue([1:113,115:end]);
+        ResponseStart = ResponseStart([1:113,115:end]);
+        ResponseEnd = ResponseEnd([1:113,115:end]);
     end
     
     load nonword_lst
@@ -78,7 +84,7 @@ for subject_Tag = subjects_Tag
     
             %% testing congruency
             StimCue_t=StimCue(t);
-            disp([subject_Tag ' ' trialInfo{1,t}.sound,' in TrialInfo, and ', StimCue_t{1}, ' in MFA event coding.'])
+            disp(strjoin(['Trial No ',num2str(t),' ',subject_Tag,' ',trialInfo{1,t}.sound,' in TrialInfo, and ', StimCue_t{1}, ' in MFA event coding.']))
             %% Temporal coding
             % Calculate the time difference between response coding and
             % temporal information from the recording.
