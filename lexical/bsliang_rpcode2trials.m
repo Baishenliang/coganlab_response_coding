@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all
 
-subjects_Tag = ["D29"];
+subjects_Tag = ["D47"];
 
 for subject_Tag = subjects_Tag
     %% Locs

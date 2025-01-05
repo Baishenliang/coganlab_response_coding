@@ -13,7 +13,7 @@ options = {"language": "en"}
 
 loc = "C:\\Users\\bl314\\"
 dir = "Box\\CoganLab\\ECoG_Task_Data\\response_coding\\response_coding_results\\LexicalDecRepDelay\\"
-subjs = ["D25","D26"]
+subjs = ["D115","D117"]
 
 def read_audio(wav_path):
     audio_data, frame_rate=librosa.load(wav_path,sr=None)
@@ -22,7 +22,11 @@ def read_audio(wav_path):
 def extract_segment(audio_data, frame_rate, start_time, end_time):
     start_frame = int(start_time * frame_rate)
     end_frame = int(end_time * frame_rate)
-    return audio_data[start_frame:end_frame]
+    segment = audio_data[start_frame:end_frame]
+    max_value = np.max(np.abs(segment))
+    if max_value > 0:
+        segment = segment * (0.98 / max_value)
+    return segment
 
 def save_temp_wav(audio_segment, frame_rate, temp_wav_path):
     sf.write(temp_wav_path,audio_segment,frame_rate)
