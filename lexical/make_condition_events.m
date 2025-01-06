@@ -6,12 +6,14 @@
 clear all
 clc
 
+% task_type='LexicalDecRepDelay\';
+task_type='LexicalDecRepNoDelay\';
 box_local='C:\Users\bl314\Box\';
-subj='D117';
+subj='D24';
 if strcmp(subj,'D63') 
     subj_path=[box_local,'CoganLab\ECoG_Task_Data\Cogan_Task_Data\D63\Lexical Delay\Block 1 2 3 4'];
 else
-    subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\',subj);
+    subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\',task_type,subj);
 end
 
 load(fullfile(subj_path,'trialInfo.mat'));
