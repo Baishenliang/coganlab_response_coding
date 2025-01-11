@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all; clc
 
-subjects_Tag = ["D117"];
+subjects_Tag = ["D26"];
 
 for subject_Tag = subjects_Tag
     %% Locs
@@ -59,6 +59,12 @@ for subject_Tag = subjects_Tag
         StimCue = StimCue([1:299,314:end]);
         ResponseStart = ResponseStart([1:299,314:end]);
         ResponseEnd = ResponseEnd([1:299,314:end]);
+    elseif contains(Trial_loc,'D26')
+        StimStart_mfa = StimStart_mfa(169:end); % Patient D26 only
+        StimEnd_mfa = StimEnd_mfa(169:end);
+        StimCue = StimCue(169:end);
+        ResponseStart = ResponseStart(169:end);
+        ResponseEnd = ResponseEnd(169:end);
     elseif contains(Trial_loc,'D92') % Patient D92 only
         StimStart_mfa = StimStart_mfa(85:end);
         StimEnd_mfa = StimEnd_mfa(85:end);
