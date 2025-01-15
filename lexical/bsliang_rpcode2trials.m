@@ -1,16 +1,21 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all; clc
 
-subjects_Tag = ["D26"];
+subjects_Tag = ["D57"];
+
+%task_type='LexicalDecRepDelay\';
+task_type='LexicalDecRepNoDelay\';
+box_local='C:\Users\bl314\Box\';
 
 for subject_Tag = subjects_Tag
+
     %% Locs
-    
-    Trial_loc_root=fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\',subject_Tag);
-    RPcode_loc=fullfile('C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay',subject_Tag);
+    RPcode_loc=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\',task_type,subject_Tag);
     if isequal(subject_Tag,"D107B")
-        RPcode_loc='C:\Users\bl314\Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\D107';
+        RPcode_loc=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\',task_type,subject_Tag);
     end
+    Trial_loc_root=fullfile(box_local,'CoganLab\D_Data\',task_type,subject_Tag);
+
     trial_files = dir(fullfile(Trial_loc_root, '**', 'mat', 'Trials.mat'));
     % if strcmp(subject_Tag,'D25')
     %     trial_files = dir(fullfile('C:\Users\bl314\Box\CoganLab\D_Data\LexicalDecRepDelay\notrigger_D25', 'Trials.mat'));
@@ -35,104 +40,178 @@ for subject_Tag = subjects_Tag
     load(fullfile(Trial_loc,"trialinfo.mat"));
     
     % Read txt files
-    f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
-    response_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
-    f = fullfile(RPcode_loc,'mfa\mfa_stim_words.txt'); 
-    stim_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
-    f = fullfile(RPcode_loc,'bsliang_errors.txt'); 
-    error_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
-    
+    if strcmp(task_type,'LexicalDecRepDelay\')
+        f = fullfile(RPcode_loc,'bsliang_resp_words.txt'); 
+        response_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+        f = fullfile(RPcode_loc,'mfa\mfa_stim_words.txt'); 
+        stim_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+        f = fullfile(RPcode_loc,'bsliang_errors.txt'); 
+        error_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+    elseif strcmp(task_type,'LexicalDecRepNoDelay\')
+        f = fullfile(RPcode_loc,'bsliang_resp_words_errors.txt'); 
+        response_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+        f = fullfile(RPcode_loc,'mfa\mfa_stim_words.txt'); 
+        stim_code = readtable(f, 'Delimiter', '\t', 'Format', '%f%f%s', 'ReadVariableNames', false);
+    end
     
     %% stimuli and response codes
     % input variables
     StimStart_mfa = stim_code.Var1;
     StimEnd_mfa = stim_code.Var2;
     StimCue = stim_code.Var3;
-    ResponseStart = response_code.Var1;
-    ResponseEnd = response_code.Var2;
-    
-    if contains(Trial_loc,'D90')
-        ResponseStart = ResponseStart(1:296); % Patient D90 only
-    elseif contains(Trial_loc,'D28')
-        StimStart_mfa = StimStart_mfa([1:299,314:end]); % Patient D28 only
-        StimEnd_mfa = StimEnd_mfa([1:299,314:end]);
-        StimCue = StimCue([1:299,314:end]);
-        ResponseStart = ResponseStart([1:299,314:end]);
-        ResponseEnd = ResponseEnd([1:299,314:end]);
-    elseif contains(Trial_loc,'D26')
-        StimStart_mfa = StimStart_mfa(169:end); % Patient D26 only
-        StimEnd_mfa = StimEnd_mfa(169:end);
-        StimCue = StimCue(169:end);
-        ResponseStart = ResponseStart(169:end);
-        ResponseEnd = ResponseEnd(169:end);
-    elseif contains(Trial_loc,'D92') % Patient D92 only
-        StimStart_mfa = StimStart_mfa(85:end);
-        StimEnd_mfa = StimEnd_mfa(85:end);
-        StimCue = StimCue(85:end);
-        ResponseStart = ResponseStart(85:end);
-        ResponseEnd = ResponseEnd(85:end);
-    elseif contains(Trial_loc,'D100')
-        ResponseStart = ResponseStart(1:252); % Patient D100 only
-    elseif contains(Trial_loc,'D102')
-        ResponseStart = ResponseStart(1:331); % Patient D102 only
-    elseif contains(Trial_loc,'D117')
-        StimStart_mfa = StimStart_mfa([1:113,115:end]); % Patient D117 only
-        StimEnd_mfa = StimEnd_mfa([1:113,115:end]);
-        StimCue = StimCue([1:113,115:end]);
-        ResponseStart = ResponseStart([1:113,115:end]);
-        ResponseEnd = ResponseEnd([1:113,115:end]);
+
+     % check trial numbers
+    if numel(trialInfo)~=numel(trialInfo)
+        error('Trials.mat and TrialInfo.mat not matched in length')
+    end
+
+    if strcmp(task_type,'LexicalDecRepDelay\')
+
+        % For lexical delay, everything about responses are stored in the
+        % response_code
+       
+        ResponseStart = response_code.Var1;
+        ResponseEnd = response_code.Var2;
+
+        % Trial correction
+        if contains(Trial_loc,'D90')
+            ResponseStart = ResponseStart(1:296); % Patient D90 only
+        elseif contains(Trial_loc,'D28')
+            StimStart_mfa = StimStart_mfa([1:299,314:end]); % Patient D28 only
+            StimEnd_mfa = StimEnd_mfa([1:299,314:end]);
+            StimCue = StimCue([1:299,314:end]);
+            ResponseStart = ResponseStart([1:299,314:end]);
+            ResponseEnd = ResponseEnd([1:299,314:end]);
+        elseif contains(Trial_loc,'D26')
+            StimStart_mfa = StimStart_mfa(169:end); % Patient D26 only
+            StimEnd_mfa = StimEnd_mfa(169:end);
+            StimCue = StimCue(169:end);
+            ResponseStart = ResponseStart(169:end);
+            ResponseEnd = ResponseEnd(169:end);
+        elseif contains(Trial_loc,'D92') % Patient D92 only
+            StimStart_mfa = StimStart_mfa(85:end);
+            StimEnd_mfa = StimEnd_mfa(85:end);
+            StimCue = StimCue(85:end);
+            ResponseStart = ResponseStart(85:end);
+            ResponseEnd = ResponseEnd(85:end);
+        elseif contains(Trial_loc,'D100')
+            ResponseStart = ResponseStart(1:252); % Patient D100 only
+        elseif contains(Trial_loc,'D102')
+            ResponseStart = ResponseStart(1:331); % Patient D102 only
+        elseif contains(Trial_loc,'D117')
+            StimStart_mfa = StimStart_mfa([1:113,115:end]); % Patient D117 only
+            StimEnd_mfa = StimEnd_mfa([1:113,115:end]);
+            StimCue = StimCue([1:113,115:end]);
+            ResponseStart = ResponseStart([1:113,115:end]);
+            ResponseEnd = ResponseEnd([1:113,115:end]);
+        end
+
+        % check trial numbers
+        if numel(response_code.Var1)~=numel(trialInfo)
+            error('response_code and TrialInfo.mat not matched in length')
+        end
+
+    elseif strcmp(task_type,'LexicalDecRepNoDelay\')
+
+        % For lexical no delay tasks, check the trial numbers here.
+        if 3*numel(response_code.Var1)~=numel(trialInfo)
+            error('response_code and TrialInfo.mat not matched in length')
+        end
+
+        % Start making the responses and errors
+        error_code=zeros(1,numel(Trials));
+        ResponseStart=zeros(1,numel(Trials));
+        ResponseEnd=zeros(1,numel(Trials));
+        rep_idx=0;
+
+        for trial=1:numel(Trials)
+            cue=trialInfo{1,trial}.cue;
+            resp=trialInfo{1,trial}.Resp;
+            if strcmp(cue,':=:')
+                % Should expect no response
+                ResponseStart(trial)=StimEnd_mfa(trial);
+                ResponseEnd(trial)=StimEnd_mfa(trial);
+                if strcmp(resp,'No Response')
+                    error_code(trial)=1; % correct
+                else
+                    error_code(trial)=0;
+                end
+            elseif strcmp(cue,'Yes/No')
+                % Reaction time is the time from stim onset
+                % https://github.com/coganlab/Tasks/blob/main/Lexical%20No%20Delay/Lex_DecisionRepeat_NoDelay_Mouse_2x.m
+                ResponseStart(trial)=StimStart_mfa(trial)+trialInfo{1,trial}.ReactionTime;
+                ResponseEnd(trial)=ResponseStart(trial);
+                error_code(trial)=trialInfo{1,trial}.RespCorrect; % This can be checked in ther future, but currently I trust the judgement from the trialInfo.
+            elseif strcmp(cue,'Repeat')
+                rep_idx=rep_idx+1;
+                ResponseStart(trial) = response_code.Var1(rep_idx);
+                ResponseEnd(trial) = response_code.Var2(rep_idx);
+                resp_code = response_code.Var3(rep_idx);
+                if  strcmp(resp_code,StimCue(trial))
+                    error_code(trial) = 1; % correct
+                else
+                    error_code(trial) = 0;
+                end
+            end
+        end
+        clear trial cue resp rt RespCorrect
     end
     
     load nonword_lst
     load word_lst
     
     % add variables
-    if length(ResponseStart)==length(Trials)
-        for t=1:length(ResponseStart)
-    
-            %% testing congruency
-            StimCue_t=StimCue(t);
-            disp(strjoin(['Trial No ',num2str(t),' ',subject_Tag,' ',trialInfo{1,t}.sound,' in TrialInfo, and ', StimCue_t{1}, ' in MFA event coding.']))
-            %% Temporal coding
-            % Calculate the time difference between response coding and
-            % temporal information from the recording.
-            % Response coding time points are aligned to recorded sound files.
-            % Markers from Trial.mat are aligned to the recorded ieeg signals.
-            % Hence we need the adjustment.
-            Diff_RScode_EDFcode=30000*StimStart_mfa(t)-Trials(t).Auditory;
-            Trials(t).StimEnd_mfa = 30000*StimEnd_mfa(t)-Diff_RScode_EDFcode;
-            Trials(t).StimCue = StimCue(t);
-            Trials(t).ResponseStart = 30000*ResponseStart(t)-Diff_RScode_EDFcode;
-            Trials(t).ResponseEnd = 30000*ResponseEnd(t)-Diff_RScode_EDFcode;
-    
-            %% Condition coding
-    
-            % get the yes and no
-            if isequal(trialInfo{1,t}.cue,'Yes/No')
-                Task_type_Tag='Yes_No';
-            else
-                Task_type_Tag='Repeat';
-            end
-    
-            % get cue word and lexical property
-            cue_word=trialInfo{1,t}.sound;
-            if contains(Trial_loc,'D23')
-                if strcmp(cue_word,'casif.wav')
-                    cue_word='casef.wav';
-                elseif strcmp(cue_word,'valek.wav')
-                    cue_word='valuk.wav';
-                end
+    for t=1:length(ResponseStart)
 
+        %% testing congruency
+        StimCue_t=StimCue(t);
+        disp(strjoin(['Trial No ',num2str(t),' ',subject_Tag,' ',trialInfo{1,t}.sound,' in TrialInfo, and ', StimCue_t{1}, ' in MFA event coding.']))
+
+        %% Temporal coding
+        % Calculate the time difference between response coding and
+        % temporal information from the recording.
+        % Response coding time points are aligned to recorded sound files.
+        % Markers from Trial.mat are aligned to the recorded ieeg signals.
+        % Hence we need the adjustment.
+        Diff_RScode_EDFcode=30000*StimStart_mfa(t)-Trials(t).Auditory;
+        Trials(t).StimEnd_mfa = 30000*StimEnd_mfa(t)-Diff_RScode_EDFcode;
+        Trials(t).StimCue = StimCue(t);
+        Trials(t).ResponseStart = 30000*ResponseStart(t)-Diff_RScode_EDFcode;
+        Trials(t).ResponseEnd = 30000*ResponseEnd(t)-Diff_RScode_EDFcode;
+
+        %% Condition coding
+
+        % get the yes and no
+        if isequal(trialInfo{1,t}.cue,'Yes/No')
+            Task_type_Tag='Yes_No';
+        elseif isequal(trialInfo{1,t}.cue,'Repeat')
+            Task_type_Tag='Repeat';
+        elseif isequal(trialInfo{1,t}.cue,':=:')
+            Task_type_Tag=':=:';
+        end
+
+        % get cue word and lexical property
+        cue_word=trialInfo{1,t}.sound;
+
+        if strcmp(task_type,'LexicalDecRepDelay\') && contains(Trial_loc,'D23')
+            if strcmp(cue_word,'casif.wav')
+                cue_word='casef.wav';
+            elseif strcmp(cue_word,'valek.wav')
+                cue_word='valuk.wav';
             end
-            if any(strcmp(cue_word, words))
-                Task_word_Tag='Word';
-            elseif any(strcmp(cue_word, nonwords))
-                Task_word_Tag='Nonword';
-            else
-                msgbox([cue_word,'Wrong word cue. Check the response coding.']);
-            end
-    
-            %% Error, noise, and late response coding
+        end
+
+        if any(strcmp(cue_word, words))
+            Task_word_Tag='Word';
+        elseif any(strcmp(cue_word, nonwords))
+            Task_word_Tag='Nonword';
+        else
+            msgbox([cue_word,'Wrong word cue. Check the response coding.']);
+        end
+
+        if strcmp(task_type,'LexicalDecRepDelay\')
+  
+            %% Error, noise, and late response coding for lexical delay
     
             % 1 ERR_TASK_YN_REP Task error: yes/no task but word repetition
             % 2 ERR_TASK_REP_YN Task error: word repetition but yes/no task	
@@ -185,55 +264,78 @@ for subject_Tag = subjects_Tag
         
                 end
             end
-    
-            % If the patient responses too late (i.e., the response end comes later
-            % than the starting point of the next trial). Then mark all the events
-            % of the current trials as "LATE_RESP"
-            if t<length(ResponseStart) && Trials(t+1).Start-Trials(t).ResponseEnd<0
-                if isempty(Resp_Err)
-                    Resp_Err='LATE_RESP';
-                else
-                    Resp_Err=[Resp_Err,'/LATE_RESP'];
-                end
+
+        elseif strcmp(task_type,'LexicalDecRepNoDelay\')
+
+            % ERR coding for lexical no delay is more casual now, but can
+            % be updated 
+
+            if error_code(t)==1
+                Resp_Err = [];
+            else
+                Resp_Err = 'RESP_ERR';
             end
-            % For the trial before, if the patient responses too late and affect the baseline.
-            % Then mark all the event of the current trials as "NOISY_BSL"
-            if t>1 && Trials(t).Start-0.5*30000-Trials(t-1).ResponseEnd<0
-                disp('Noisy baseline trial detected')
-                if isempty(Resp_Err)
-                    Resp_Err='NOISY_BSL';
-                else
-                    Resp_Err=[Resp_Err,'/NOISY_BSL'];
-                end
-            end
-    
-            % If Oral response comes before the "GO" cue, the trial is marked
-            % as "EARLY_RESP"
-            if Trials(t).ResponseStart-Trials(t).Go<0
-                if isempty(Resp_Err)
-                    Resp_Err='EARLY_RESP';
-                else
-                    Resp_Err=[Resp_Err,'/EARLY_RESP'];
-                end
-            end
-        
-            % If Resp_Err is still empty, make it as "CORRECT".
+
+        end
+
+        % If the patient responses too late (i.e., the response end comes later
+        % than the starting point of the next trial). Then mark all the events
+        % of the current trials as "LATE_RESP"
+        if t<length(ResponseStart) && Trials(t+1).Start-Trials(t).ResponseEnd<0
             if isempty(Resp_Err)
-                Resp_Err='CORRECT';
+                Resp_Err='LATE_RESP';
+            else
+                Resp_Err=[Resp_Err,'/LATE_RESP'];
             end
-        
+        end
+
+        % For the trial before, if the patient responses too late and affect the baseline.
+        % Then mark all the event of the current trials as "NOISY_BSL"
+        if t>1 && Trials(t).Start-0.5*30000-Trials(t-1).ResponseEnd<0
+            disp('Noisy baseline trial detected')
+            if isempty(Resp_Err)
+                Resp_Err='NOISY_BSL';
+            else
+                Resp_Err=[Resp_Err,'/NOISY_BSL'];
+            end
+        end
+
+        if strcmp(task_type,'LexicalDecRepDelay\')
+            % For Lexical Delay
+            % Oral response comes before the "GO" cue, the trial is marked
+            % as "EARLY_RESP"
+            No_earlier_than_T=Trials(t).Go;
+        elseif strcmp(task_type,'LexicalDecRepNoDelay\')
+            % For Lexical No Delay
+            % Any responses comes before the End of the sound, the trial is marked
+            % as "EARLY_RESP"
+            No_earlier_than_T=Trials(t).StimEnd_mfa-0.1*3e4;
+            % Give it a 0.1s tolerance preceeding window
+        end
+        if Trials(t).ResponseStart-No_earlier_than_T<0
+            if isempty(Resp_Err)
+                Resp_Err='EARLY_RESP';
+            else
+                Resp_Err=[Resp_Err,'/EARLY_RESP'];
+            end
+        end
+
+        % If Resp_Err is still empty, make it as "CORRECT".
+        if isempty(Resp_Err)
+            Resp_Err='CORRECT';
+        end
     
-            %% Add the condition and error codings to Cue, Auditoru stimuli, Delay
-            Trials(t).Cue_Tag = ['Cue','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
-            Trials(t).Auditory_Tag = ['Auditory_stim','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
+
+        %% Add the condition and error codings to Cue, Auditoru stimuli, Delay
+        Trials(t).Cue_Tag = ['Cue','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
+        Trials(t).Auditory_Tag = ['Auditory_stim','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
+        if strcmp(task_type,'LexicalDecRepDelay\')
             Trials(t).Delay_Tag = ['Delay','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
             Trials(t).Go_Tag = ['Go','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
-            Trials(t).Response_Tag = ['Resp','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
-    
-    
         end
-    else
-        msgbox('Trial number does not match response coding!')
+        Trials(t).Response_Tag = ['Resp','/',Task_type_Tag,'/',Task_word_Tag,'/',Trials(t).StimCue{1},'/',Resp_Err];
+
+
     end
     
     save(fullfile(Trial_loc,"Trials.mat"),'Trials');
