@@ -61,7 +61,7 @@ for subject_Tag = subjects_Tag
     StimCue = stim_code.Var3;
 
      % check trial numbers
-    if numel(trialInfo)~=numel(trialInfo)
+    if numel(Trials)~=numel(trialInfo)
         error('Trials.mat and TrialInfo.mat not matched in length')
     end
 
