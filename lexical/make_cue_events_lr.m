@@ -19,8 +19,8 @@ else
 end
 load(fullfile(Trial_loc,"Trials.mat"));
 
-offset = 0.0234; % seconds
-is_picture_naming = 0;
+% offset = 0.0234; % seconds
+% is_picture_naming = 0;
 
 if iscell(trialInfo)
     trialInfo = cellfun(@(a) a, trialInfo);
@@ -29,7 +29,7 @@ end
 rc = scantext(fullfile(subj_path,'first_stims.txt'), '\t', 0, '%f %f %s');
 first_stims_onset = rc{1};
 
-file_path = fullfile(subj_path, 'cue_events.txt');
+file_path = fullfile(subj_path, 'cue_events_from_Trials.mat.txt');
 if exist(file_path, 'file') == 2
     error('File "%s" already exists. Program terminated.', file_path);
 end
