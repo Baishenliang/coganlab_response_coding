@@ -13,11 +13,13 @@
 %% Load Trialinfo and Trials.mat
 % load block_wav_onsets.mat
 clear all
+close all
+clc
 
-% task_type='LexicalDecRepDelay\';
+%task_type='LexicalDecRepDelay\';
 task_type='LexicalDecRepNoDelay\';
 box_local='C:\Users\bl314\Box\';
-subj='D53';
+subj='D57';
 subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\',task_type,subj);
 Trial_loc_root=fullfile(box_local,'CoganLab\D_Data\',task_type,subj);
 load(fullfile(subj_path,'trialInfo.mat'));
@@ -40,14 +42,23 @@ cue_events = scantext(file_path, '\t', 0, '%f %f %s');
 [Trials_audonsets,trialInfo_audonsets,cue_events_audonsets]=deal(nan(1,numel(Trials)));
 b=0;
 for t=1:numel(Trials)
+    if isfield(trialInfo,'audiostart')
+        trialInfo_audonset = trialInfo(t).audiostart; %Start;
+    elseif isfield(trialInfo,'audioStart')
+        trialInfo_audonset = trialInfo(t).audioStart; %Start;
+    elseif isfield(trialInfo,'stimulusAudioStart')
+        trialInfo_audonset = trialInfo(t).stimulusAudioStart; %Start;
+    elseif isfield(trialInfo,'stimuliAlignedTrigger')
+        trialInfo_audonset = trialInfo(t).stimuliAlignedTrigger;
+    end
     if trialInfo(t).block ~= b
         b = b + 1;
         edf_first_stim_on=Trials(t).Auditory/3e4;
-        trialInfo_stim_on=trialInfo(t).stimulusAudioStart;
+        trialInfo_stim_on=trialInfo_audonset;
         cue_events_stim_on=cue_events{1}(t);
     end
     Trials_audonsets(t)=Trials(t).Auditory/3e4-edf_first_stim_on;
-    trialInfo_audonsets(t)=trialInfo(t).stimulusAudioStart-trialInfo_stim_on;
+    trialInfo_audonsets(t)=trialInfo_audonset-trialInfo_stim_on;
     cue_events_audonsets(t)=cue_events{1}(t)-cue_events_stim_on;
 end
 
@@ -70,11 +81,11 @@ Trials_audonsets_contrast(Trials_audonsets_contrast<0)=[];
 trialInfo_audonsets_contrast(trialInfo_audonsets_contrast<0)=[];
 cue_events_audonsets_contrast(cue_events_audonsets_contrast<0)=[];
 %% plot the trial length
-figure;
-plot(1:numel(Trials)-b,cue_events_audonsets_contrast,'ro')
-hold on
-plot(1:numel(Trials)-b,Trials_audonsets_contrast,'go')
-plot(1:numel(Trials)-b,trialInfo_audonsets_contrast,'bo')
-xlabel('trial no');
-ylabel('time/s')
-legend({'Auditory onsets manually adjusted', 'Auditory onsets from Trials.mat','Auditory onsets from trialInfo.mat'})
+% figure;
+% plot(1:numel(Trials)-b,cue_events_audonsets_contrast,'ro')
+% hold on
+% plot(1:numel(Trials)-b,Trials_audonsets_contrast,'go')
+% plot(1:numel(Trials)-b,trialInfo_audonsets_contrast,'bo')
+% xlabel('trial no');
+% ylabel('time/s')
+% legend({'Auditory onsets manually adjusted', 'Auditory onsets from Trials.mat','Auditory onsets from trialInfo.mat'})

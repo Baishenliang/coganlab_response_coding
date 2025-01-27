@@ -1,10 +1,10 @@
 % load block_wav_onsets.mat
 clear all
 
-% task_type='LexicalDecRepDelay\';
+%task_type='LexicalDecRepDelay\';
 task_type='LexicalDecRepNoDelay\';
 box_local='C:\Users\bl314\Box\';
-subj='D53';
+subj='D29';
 subj_path=fullfile(box_local,'CoganLab\ECoG_Task_Data\response_coding\response_coding_results\',task_type,subj);
 Trial_loc_root=fullfile(box_local,'CoganLab\D_Data\',task_type,subj);
 load(fullfile(subj_path,'trialInfo.mat'));
