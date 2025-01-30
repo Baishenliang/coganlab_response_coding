@@ -5,10 +5,10 @@
 clear all; clc;
 
 %% define subject and path
-subject = 117;
+subject = 120;
 homeDir = getenv('USERPROFILE');
 in_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'Cogan_Task_Data', ['D', num2str(subject)], 'Retro Cue', 'All Blocks');
-out_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'response_coding', 'response_coding_results', 'Retrocue',['D', num2str(subject)]);
+out_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'response_coding', 'response_coding_results', 'Retro_cue',['D', num2str(subject)]);
 if ~exist(out_path, 'dir')
     mkdir(out_path);
     fprintf('Directory created: %s\n', out_path);
