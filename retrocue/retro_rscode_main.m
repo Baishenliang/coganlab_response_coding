@@ -5,7 +5,7 @@
 clear all; clc;
 
 %% define subject and path
-subject = 120;
+subject = 121;
 homeDir = getenv('USERPROFILE');
 in_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'Cogan_Task_Data', ['D', num2str(subject)], 'Retro Cue', 'All Blocks');
 out_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'response_coding', 'response_coding_results', 'Retro_cue',['D', num2str(subject)]);

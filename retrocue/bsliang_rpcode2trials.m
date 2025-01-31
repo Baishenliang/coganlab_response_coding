@@ -186,7 +186,7 @@ for subject_Tag = subjects_Tag
         elseif strcmp(retro_code,'1 2')
             Retro_cue='REP_BTH';
         elseif strcmp(retro_code,'2 1')
-            Retro_cuue='REV_BTH';
+            Retro_cue='REV_BTH';
         end
 
         %% Add the condition and error codings to Cue, Auditoru stimuli, Delay
