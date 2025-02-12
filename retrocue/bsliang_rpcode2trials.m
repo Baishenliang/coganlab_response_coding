@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all; clc
 
-subjects_Tag = ["D120"];
+subjects_Tag = ["D117"];
 
 task_type='Retro_cue\';
 box_local='C:\Users\bl314\Box\';

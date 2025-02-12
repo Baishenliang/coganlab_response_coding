@@ -9,7 +9,7 @@ clc
 % task_type='LexicalDecRepDelay\';
 task_type='LexicalDecRepNoDelay\';
 box_local='C:\Users\bl314\Box\';
-subj='D53';
+subj='D69';
 if strcmp(subj,'D63') && task_type=='LexicalDecRepDelay\'
     subj_path=[box_local,'CoganLab\ECoG_Task_Data\Cogan_Task_Data\D63\Lexical Delay\Block 1 2 3 4'];
 else
