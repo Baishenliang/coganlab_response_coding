@@ -1,8 +1,14 @@
+% Trigger information can be found in:
+% "Box\CoganLab\ECoG_Task_Data\Timestamps (MASTER).xlsx"
+% DC1: 257
+addpath(genpath('D:\bsliang_Coganlabcode\response_coding\retrocue\make_Trials_mat'));
 
-%% first create a subject folder, e.g. D29/lexical_dr_2x_within_nodelay/part1/ and place task .edf file there
+%% 
+
+% first create a subject folder, e.g. D29/lexical_dr_2x_within_nodelay/part1/ and place task .edf file there
 % create a subject case below and fill in variables
 clear;
-subj_task = 'D120';
+subj_task = 'D120_012';
 trigger_chan_index = [];
 mic_chan_index = [];
 
@@ -23,33 +29,43 @@ switch subj_task
         %%%%%%%%
         trigger_chan_index = 257; % DC1
         mic_chan_index = 258; % DC1+1
-        neural_chan_index = [1:60, 65:122, 129:233];
 
     case 'D120_012' % Retro Cue
-        cd '.\data'
         taskstim = 'Retro_Cue';
-        subj = 'D117';
-        edf_filename = 'D117 241208 COGAN_RETROCUE.EDF'; %needed
-        ptb_trialInfo = 'D117_Block_1_TrialData.mat';
+        subj = 'D120';
+        edf_filename = 'D120 250114 COGAN_RETROCUE.EDF'; %needed
+        ptb_trialInfo = 'D120_Block_1_TrialData.mat';
         taskdate = '241208'; 
         ieeg_prefix = [subj, '_', taskstim, '_']; % (auto-fills)
         rec = '001'; %session number
         %%%%%%%%
         trigger_chan_index = 257; % DC1
         mic_chan_index = 258; % DC1+1
-        neural_chan_index = [1:60, 65:122, 129:233];
 
 end
 
-load(ptb_trialInfo);
+% Direct to the patient path
+homeDir = getenv('USERPROFILE');
+D_data_path = fullfile(homeDir,'Box', 'CoganLab', 'D_Data', 'Retro_Cue');
+out_path = fullfile(homeDir,'Box', 'CoganLab', 'D_Data', 'Retro_Cue',subj);
+if ~exist(out_path, 'dir')
+    mkdir(out_path);
+end
+copyfile('maketrigtimes.m', out_path);
+cd(out_path)
+
+% Copy and load the TrialInfo.mat
+ptb_trialInfo_path = fullfile(homeDir,'Box', 'CoganLab', 'ECoG_Task_Data', 'Cogan_Task_Data', subj, 'Retro Cue', 'All Blocks');
+load(fullfile(ptb_trialInfo_path,ptb_trialInfo));
 trialInfoAll = []; 
 trialInfoAll = [trialInfoAll trialInfo];
 trialInfo = trialInfoAll;
 save('trialInfo', 'trialInfo');
 
-%% for first subject task, determine neural_chan_index, trigger_chan_index, and mic_chan_index
+% for first subject task, determine neural_chan_index, trigger_chan_index, and mic_chan_index
 % once these are determined for a subject, they are the same across tasks
-h = edfread_fast(edf_filename);
+D_data_path_EDF = fullfile(D_data_path,'EDFs');
+h = edfread_fast(fullfile(D_data_path_EDF,edf_filename));
 labels = h.label;
 % examine labels variable and determine the indices of neural channels
 % (Exclude ones that start with C, EKG, Event, TRIG, OSAT, PR, Pleth, etc.
@@ -57,11 +73,11 @@ labels = h.label;
 % fill in the above case information for neural_chan()
     % see case D29_002_1 for an example on how to skip channels
 
-%% extract trigger channel and mic channel from edf and save as trigger.mat and mic.mat
+% extract trigger channel and mic channel from edf and save as trigger.mat and mic.mat
 if strcmp(h.label(end),'EDFAnnotations')
-[~,d] = edfread_fast(edf_filename,1:length(h.label)-1);
+[~,d] = edfread_fast(fullfile(D_data_path_EDF,edf_filename),1:length(h.label)-1);
 else
-    [~,d] = edfread_fast(edf_filename);
+    [~,d] = edfread_fast(fullfile(D_data_path_EDF,edf_filename));
 end
 %[~,d] = edfread(edf_filename, 'machinefmt', 'ieee-le'); % use if you get a
 %memory error for edfread_fast;
@@ -81,27 +97,50 @@ if ~isempty(trigger_chan_index)
 
 end
 
-%% make *.ieeg.dat file
+
+%%
+% Determine the ieeg channels by visual inspection (exclude the eeg channels, blank channels, and others)
+% Use **labels**
+switch subj_task
+    case 'D117_012' % Retro Cue
+        neural_chan_index = [1:60, 65:122, 129:233];
+    case 'D120_012' % Retro Cue
+        neural_chan_index = [1:55, 65:126, 129:219];
+end
+% make *.ieeg.dat file
 filename=[ieeg_prefix taskdate '.ieeg.dat'];
 fid=fopen(filename,'w');
 fwrite(fid,d(neural_chan_index,:),'float');
 fclose(fid);
 write_experiment_file;
-% manually copy .ieeg.dat into [taskdate]/[rec]/
-% manually copy experiment.mat into mat
 
-%% manually copy maketrigtimes.m into subject folder and edit / run it to generate trigTimes.mat
+% move .ieeg.dat into [taskdate]/[rec]/
+source_files = dir('*.ieeg.dat');
+destination_folder = fullfile(taskdate, rec);
+if ~exist(destination_folder, 'dir')
+    mkdir(destination_folder);
+end
+for i = 1:length(source_files)
+    source_file = source_files(i).name;
+    destination_file = fullfile(destination_folder, source_file);
+    movefile(source_file, destination_file);
+end
+
+% move experiment.mat into mat
+source_mat = 'experiment.mat';
+destination_mat_folder = 'mat';
+if ~exist(destination_mat_folder, 'dir')
+    mkdir(destination_mat_folder);
+end
+destination_mat_file = fullfile(destination_mat_folder, source_mat);
+if exist(source_mat, 'file')
+    movefile(source_mat, destination_mat_file);
+end
+
+% Edit / run maketrigtimes.m to generate trigTimes.mat
 % see trigger_walker.m if you have a noisy trigger channel and need to
-% estimate / interpolate / extrapolate an auditory Onset																	  												
-
-%% for subjects D26 and newer, audio onset is 0.0234 samples after each trigger
-load trigTimes.mat;
-%load trigTimes2.mat; %(for multiple files)
-trigTimes_audioAligned = trigTimes + ceil(.0234 * h.frequency(1));
-save('trigTimes_audioAligned', 'trigTimes_audioAligned');
-
-%% (optional) run view_stim_wavs_on_neural_mic.m to visualize the alignment between microphone and stimulus waves
-
+% estimate / interpolate / extrapolate an auditory Onset
+open('maketrigtimes.m')
 
 %% create a generic Trials.mat (for Retro Cue)
 
@@ -112,7 +151,7 @@ if iscell(trialInfo)
     trialInfo = cell2mat(trialInfo);
 end
 
-h = edfread_fast(edf_filename);
+h = edfread_fast(fullfile(D_data_path_EDF,edf_filename));
 Trials = struct();
 Rec_onsets = [];
 trigT_idx = 0;
@@ -174,5 +213,14 @@ for A=1:numel(trialInfo) % change to number of trials
 end
 
 save('Trials.mat', 'Trials');
-save('Rec_onsets.mat','Rec_onsets');
+%save('Rec_onsets.mat','Rec_onsets');
 %if there are multiple files, also save as Trials1, Trials2, etc.
+
+% Move Trials.mat and TrialInfo.mat
+destination_folder = fullfile(taskdate, 'mat');
+source_files_Trialsmat = 'Trials.mat';
+destination_file_Trialsmat = fullfile(destination_folder, source_files_Trialsmat);
+movefile(source_files_Trialsmat, destination_file_Trialsmat);
+source_files_trialInfo = 'trialInfo.mat';
+destination_file_trialInfo = fullfile(destination_folder, source_files_trialInfo);
+movefile(source_files_trialInfo, destination_file_trialInfo);

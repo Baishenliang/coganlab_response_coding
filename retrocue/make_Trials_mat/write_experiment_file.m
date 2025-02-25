@@ -1,8 +1,8 @@
 
 if ~exist('d', 'var')
-    [~,d] = edfread_fast(edf_filename);
+    [~,d] = edfread_fast(fullfile(D_data_path_EDF,edf_filename));
 end
-h = edfread_fast(edf_filename);
+h = edfread_fast(fullfile(D_data_path_EDF,edf_filename));
 h.label'
 
 d = d(neural_chan_index,:);
