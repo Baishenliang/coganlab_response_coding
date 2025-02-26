@@ -8,7 +8,7 @@ addpath(genpath('D:\bsliang_Coganlabcode\response_coding\retrocue\make_Trials_ma
 % first create a subject folder, e.g. D29/lexical_dr_2x_within_nodelay/part1/ and place task .edf file there
 % create a subject case below and fill in variables
 clear;
-subj_task = 'D120_012';
+subj_task = 'D123_012';
 trigger_chan_index = [];
 mic_chan_index = [];
 
@@ -42,6 +42,30 @@ switch subj_task
         trigger_chan_index = 257; % DC1
         mic_chan_index = 258; % DC1+1
 
+    case 'D121_012' % Retro Cue
+        taskstim = 'Retro_Cue';
+        subj = 'D121';
+        edf_filename = 'D121 250126 COGAN_RETROCUE.EDF'; %needed
+        ptb_trialInfo = 'D121_Block_1_TrialData.mat';
+        taskdate = '250126'; 
+        ieeg_prefix = [subj, '_', taskstim, '_']; % (auto-fills)
+        rec = '001'; %session number
+        %%%%%%%%
+        trigger_chan_index = 258; % DC2
+        mic_chan_index = 259; % DC2+1
+
+    case 'D123_012' % Retro Cue
+        taskstim = 'Retro_Cue';
+        subj = 'D123';
+        edf_filename = 'D123 250214 COGAN_RETROCUE.EDF'; %needed
+        ptb_trialInfo = 'D123_Block_1_TrialData.mat';
+        taskdate = '250214'; 
+        ieeg_prefix = [subj, '_', taskstim, '_']; % (auto-fills)
+        rec = '001'; %session number
+        %%%%%%%%
+        trigger_chan_index = 257; % DC1
+        mic_chan_index = 258; % DC1+1
+     
 end
 
 % Direct to the patient path
@@ -106,6 +130,10 @@ switch subj_task
         neural_chan_index = [1:60, 65:122, 129:233];
     case 'D120_012' % Retro Cue
         neural_chan_index = [1:55, 65:126, 129:219];
+    case 'D121_012' % Retro Cue
+        neural_chan_index = [1:53, 65:127, 129:226];
+    case 'D123_012' % Retro Cue
+        neural_chan_index = [1:60, 65:121, 129:185, 193:219];
 end
 % make *.ieeg.dat file
 filename=[ieeg_prefix taskdate '.ieeg.dat'];
