@@ -13,7 +13,7 @@ options = {"language": "en"}
 
 loc = "C:\\Users\\bl314\\"
 dir = "Box\\CoganLab\\ECoG_Task_Data\\response_coding\\response_coding_results\\LexicalDecRepDelay\\"
-subjs = ["D139"]
+subjs = ["D137"]
 
 def read_audio(wav_path):
     audio_data, frame_rate=librosa.load(wav_path,sr=None)

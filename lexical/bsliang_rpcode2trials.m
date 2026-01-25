@@ -1,7 +1,7 @@
 % Write response coding to Trials.mat for BIDs formating
 clear all; clc
 
-subjects_Tag = ["D127","D128","D129","D132","D134","D135"];
+subjects_Tag = ["D137"];
 
 task_type='LexicalDecRepDelay\';
 %task_type='LexicalDecRepNoDelay\';

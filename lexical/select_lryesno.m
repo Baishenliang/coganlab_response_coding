@@ -9,7 +9,7 @@ clc;
 %% Basic parameters
 loc='C:\Users\bl314\';
 dir='Box\CoganLab\ECoG_Task_Data\response_coding\response_coding_results\LexicalDecRepDelay\';
-subjs={'D139'};
+subjs={'D137'};
 
 for i=1:length(subjs)
     
