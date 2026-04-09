@@ -42,7 +42,7 @@ for i = 1:length(subFolders)
         subNum = str2double(tokens{1}{1});
         
         % Filter for subjects D121 and larger
-        if subNum > 121
+        if subNum > 141
             fprintf('\n----------------------------------------\n');
             fprintf('Found Subject: %s\n', subName);
             processSubject(sourceDataRoot, subName, resultsRoot, taskMode);
