@@ -7,7 +7,7 @@ clc; clear; close all;
 % 1 = Lexical Delay ONLY
 % 2 = Lexical No Delay ONLY
 % 3 = BOTH (Lexical Delay AND Lexical No Delay)
-taskMode = 1; 
+taskMode = 2; 
 % -------------------------------------------------------------------------
 
 % Main directory for Source Data
@@ -42,7 +42,7 @@ for i = 1:length(subFolders)
         subNum = str2double(tokens{1}{1});
         
         % Filter for subjects D121 and larger
-        if subNum > 141
+        if subNum > 140
             fprintf('\n----------------------------------------\n');
             fprintf('Found Subject: %s\n', subName);
             processSubject(sourceDataRoot, subName, resultsRoot, taskMode);
